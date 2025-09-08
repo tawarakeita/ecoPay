@@ -2,7 +2,7 @@
 
 class DeviseCreateMerchants < ActiveRecord::Migration[7.1]
   def change
-    create_table :merchants do |t|
+    create_table :merchants, if_not_exists: true do |t|
       ## Database authenticatable
       t.string :email,              null: false, default: ""
       t.string :encrypted_password, null: false, default: ""
