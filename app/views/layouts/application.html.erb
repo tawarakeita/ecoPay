@@ -11,6 +11,15 @@
   </head>
 
   <body>
+    <% if merchant_signed_in? %>
+      <h1>協賛店モード</h1>
+      <%= link_to "ログアウト", destroy_merchant_session_path, method: :delete, data: { turbo_method: :delete } %>
+    <% elsif user_signed_in? %>
+      <h1>一般ユーザーモード</h1>
+      <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete } %>
+    <% else %>
+      <%= link_to "ログイン", new_user_session_path %>
+    <% end %>
     <%= yield %>
   </body>
 </html>

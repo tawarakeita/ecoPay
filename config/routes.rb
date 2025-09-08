@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   resources :point_transactions
   resources :payments
   resources :missions
-  devise_for :merchants
+  devise_for :merchants, controllers: {
+    registrations: 'merchants/registrations'
+  }
   root 'top#index'
 
   devise_for :users
