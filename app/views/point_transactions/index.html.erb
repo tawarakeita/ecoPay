@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Point transactions</h1>
+
+<div id="point_transactions">
+  <% @point_transactions.each do |point_transaction| %>
+    <%= render point_transaction %>
+    <p>
+      <%= link_to "Show this point transaction", point_transaction %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New point transaction", new_point_transaction_path %>

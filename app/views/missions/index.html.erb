@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Missions</h1>
+
+<div id="missions">
+  <% @missions.each do |mission| %>
+    <%= render mission %>
+    <p>
+      <%= link_to "Show this mission", mission %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New mission", new_mission_path %>
