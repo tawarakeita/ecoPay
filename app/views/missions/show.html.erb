@@ -3,8 +3,10 @@
 <%= render @mission %>
 
 <div>
-  <%= link_to "Edit this mission", edit_mission_path(@mission) %> |
   <%= link_to "Back to missions", missions_path %>
 
-  <%= button_to "Destroy this mission", @mission, method: :delete %>
+  <% if merchant_signed_in? %>
+    <%= link_to "Edit this mission", edit_mission_path(@mission) %>
+    <%= button_to "Destroy this mission", @mission, method: :delete %>
+  <% end %>
 </div>

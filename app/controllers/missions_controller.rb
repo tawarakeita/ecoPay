@@ -3,7 +3,11 @@ class MissionsController < ApplicationController
 
   # GET /missions or /missions.json
   def index
-    @missions = Mission.all
+    if merchant_signed_in?
+      @missions = current_merchant.missions
+    else
+      @missions = Mission.all
+    end
   end
 
   # GET /missions/1 or /missions/1.json
@@ -12,16 +16,23 @@ class MissionsController < ApplicationController
 
   # GET /missions/new
   def new
-    @mission = Mission.new
+    if merchant_signed_in?
+      @mission = Mission.new
+    else
+      redirect_to missions_path
+    end
   end
 
   # GET /missions/1/edit
   def edit
+    if !merchant_signed_in?
+      redirect_to missions_path
+    end
   end
 
   # POST /missions or /missions.json
   def create
-    @mission = Mission.new(mission_params)
+    @mission = current_merchant.missions.new(mission_params)
 
     respond_to do |format|
       if @mission.save
