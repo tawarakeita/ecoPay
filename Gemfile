@@ -67,3 +67,5 @@ group :test do
 end
 
 gem "devise"
+gem "tailwindcss-ruby"
+gem "tailwindcss-rails"
