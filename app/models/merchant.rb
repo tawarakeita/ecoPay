@@ -4,4 +4,5 @@ class Merchant < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   has_many :missions, dependent: :destroy
+  has_many :payments, dependent: :destroy
 end

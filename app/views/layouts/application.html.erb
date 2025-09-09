@@ -11,6 +11,9 @@
   </head>
 
   <body>
+    <div>
+      
+    </div>
     <% if merchant_signed_in? %>
       <h1>協賛店モード</h1>
       <%= link_to "ログアウト", destroy_merchant_session_path, method: :delete, data: { turbo_method: :delete } %>

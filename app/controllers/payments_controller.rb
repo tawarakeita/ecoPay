@@ -3,7 +3,11 @@ class PaymentsController < ApplicationController
 
   # GET /payments or /payments.json
   def index
-    @payments = Payment.all
+    if merchant_signed_in?
+      @payments = current_merchant.payments
+    else
+      redirect_to root_path
+    end
   end
 
   # GET /payments/1 or /payments/1.json
@@ -22,6 +26,7 @@ class PaymentsController < ApplicationController
   # POST /payments or /payments.json
   def create
     @payment = Payment.new(payment_params)
+    @payment.user_id = current_user.id
 
     respond_to do |format|
       if @payment.save

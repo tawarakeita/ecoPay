@@ -3,11 +3,13 @@
 <h1>Payments</h1>
 
 <div id="payments">
-  <% @payments.each do |payment| %>
-    <%= render payment %>
-    <p>
-      <%= link_to "Show this payment", payment %>
-    </p>
+  <% if merchant_signed_in? %>
+    <% @payments.each do |payment| %>
+      <%= render payment %>
+      <p>
+        <%= link_to "Show this payment", payment %>
+      </p>
+    <% end %>
   <% end %>
 </div>
 
