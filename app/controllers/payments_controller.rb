@@ -12,11 +12,19 @@ class PaymentsController < ApplicationController
 
   # GET /payments/1 or /payments/1.json
   def show
+    # if @payment.created_at < 5.minutes.ago
+    #   redirect_to root_path, alert: "確認画面の有効期限が切れました"
+    # end
   end
 
   # GET /payments/new
   def new
     @payment = Payment.new
+    merchant_id = params[:merchant_id]
+    @merchant = Merchant.find_by(id: merchant_id)
+    if @merchant.nil?
+      redirect_to root_path, alert: "指定の協賛店が存在しません"
+    end
   end
 
   # GET /payments/1/edit
@@ -25,8 +33,7 @@ class PaymentsController < ApplicationController
 
   # POST /payments or /payments.json
   def create
-    @payment = Payment.new(payment_params)
-    @payment.user_id = current_user.id
+    @payment = current_user.payments.new(payment_params)
 
     respond_to do |format|
       if @payment.save

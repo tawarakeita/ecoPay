@@ -10,18 +10,18 @@
       </ul>
     </div>
   <% end %>
-
-  <div>
-    <%= form.label :merchant_id, style: "display: block" %>
-    <%= form.text_field :merchant_id %>
-  </div>
-
-  <div>
-    <%= form.label :amount, style: "display: block" %>
-    <%= form.number_field :amount %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
+    <div class="mb-4">
+      <%= form.label :merchant_id, "支払い先", style: "display: block" %>
+      <span class="text-xl">
+        <%= @merchant.name %>
+        <%= form.hidden_field :merchant_id, value: @merchant.id %>
+      </span>
+    </div>
+    <div>
+      <%= form.label :amount, "利用するポイント数", style: "display: block" %>
+      <%= form.number_field :amount, class: "border border-black p-1 rounded-sm mt-1" %>
+    </div>
+    <div class="flex justify-center mt-8">
+      <%= form.submit "決済", class: "border border-black p-1 rounded-sm flex" %>
+    </div>
 <% end %>

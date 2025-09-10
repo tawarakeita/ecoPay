@@ -1,9 +1,8 @@
-<h1>New payment</h1>
+<div class="mt-4">
+  <%= link_to "読み取りし直す", payments_path, class: "ml-2" %>
+  <h1 class="mb-9 flex justify-center text-3xl">支払い</h1>
+</div>
 
-<%= render "form", payment: @payment %>
-
-<br>
-
-<div>
-  <%= link_to "Back to payments", payments_path %>
+<div class="m-9">
+  <%= render "form", payment: @payment %>
 </div>
