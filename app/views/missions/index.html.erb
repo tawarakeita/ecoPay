@@ -1,12 +1,23 @@
 <p style="color: green"><%= notice %></p>
 
-<h1>Missions</h1>
-
 <div id="missions">
+  <h1 class="m-9 flex justify-center text-3xl"> ecoPayミッション</h1>
   <% @missions.each do |mission| %>
-    <%= render mission %>
-    <p>
-      <%= link_to "Show this mission", mission %>
-    </p>
+    <%= link_to mission do %>
+      <div id="<%= dom_id mission %>" class="flex flex-col m-auto border-[#2a5637] border w-[90vw] p-2 rounded-b-sm">
+        <span>
+          <%= mission.merchant.name %>
+        </span>
+
+        <span class="text-xl font-bold">
+          <%= mission.title %>
+        </span>
+
+        <span class="ml-auto">
+          <%= mission.point %>
+          <span>ポイント</span>
+        </span>
+      </div>
+    <% end %>
   <% end %>
 </div>

@@ -1,21 +1,17 @@
-<div id="<%= dom_id mission %>">
-  <p>
-    <strong>Merchant:</strong>
-    <%= mission.merchant.name %>
-  </p>
-
-  <p>
-    <strong>Title:</strong>
-    <%= mission.title %>
-  </p>
-
-  <p>
-    <strong>Description:</strong>
+<div id="<%= dom_id mission %>" class="p-5">
+  <div class="mb-3">
+    <h1 class="text-3xl">
+      <%= mission.title %>
+    </h1>
+    <span>
+      <%= mission.merchant.name %>
+    </span>
+  </div>
+  <span>
     <%= mission.description %>
-  </p>
-
-  <p>
-    <strong>Point:</strong>
+  </span>
+  <span class="flex justify-end mt-3">
     <%= mission.point %>
-  </p>
+    <span>ポイント</span>
+  </span>
 </div>
