@@ -6,24 +6,72 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <div>
-      
+    <!-- SVG定義 -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+      <symbol id="icon-hamburger" viewBox="0 0 30 22" fill="none">
+        <g clip-path="url(#clip0_57_28)">
+          <path d="M0 1H30" stroke="currentColor" stroke-width="2"/>
+          <path d="M0 11H30" stroke="currentColor" stroke-width="2"/>
+          <path d="M0 21H30" stroke="currentColor" stroke-width="2"/>
+        </g>
+        <defs>
+          <clipPath id="clip0_57_28">
+            <rect width="30" height="22" fill="white"/>
+          </clipPath>
+        </defs>
+      </symbol>
+    </svg>
+
+    <!-- ヘッダー -->
+    <div class="bg-green-800 w-full h-[75px] flex items-center justify-between p-4 relative">
+      <svg class="w-10 h-8 text-white cursor-pointer" id="burger">
+        <use href="#icon-hamburger"></use>
+      </svg>
+
+      <span class="text-3xl text-white">ecoPay</span>
+
+      <!-- メニュー -->
+      <div id="content" class="hidden w-50 h-60 absolute bg-white border top-20 left-1.5 rounded-lg p-2 shadow-md z-50">
+        <% if merchant_signed_in? %>
+          <h1 class="text-xl">協賛店アカウント</h1>
+          <div class="mt-1">
+            <%= current_merchant.name %><br />
+            <%= link_to "ログアウト", destroy_merchant_session_path, method: :delete, data: { turbo_method: :delete }, class: "text-blue-600 underline hover:text-blue-800 cursor-pointer" %>
+          </div>
+        <% elsif user_signed_in? %>
+          <div class="mt-1">
+            <%= current_user.email %><br />
+            <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "text-blue-600 underline hover:text-blue-800 cursor-pointer" %>
+          </div>
+        <% else %>
+          <%= link_to "ログイン", new_user_session_path %>
+        <% end %>
+      </div>
     </div>
-    <% if merchant_signed_in? %>
-      <h1>協賛店モード</h1>
-      <%= link_to "ログアウト", destroy_merchant_session_path, method: :delete, data: { turbo_method: :delete } %>
-    <% elsif user_signed_in? %>
-      <h1>一般ユーザーモード</h1>
-      <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete } %>
-    <% else %>
-      <%= link_to "ログイン", new_user_session_path %>
-    <% end %>
+
     <%= yield %>
+
+    <!-- JS -->
+    <script>
+      document.addEventListener("turbo:load", () => {
+      const burger = document.getElementById("burger");
+      const content = document.getElementById("content");
+
+      if (burger && content) {
+        // 既存イベント削除
+        burger.replaceWith(burger.cloneNode(true));
+        const newBurger = document.getElementById("burger");
+
+        newBurger.addEventListener("click", () => {
+          content.classList.toggle("hidden");
+        });
+      }
+    });
+    </script>
   </body>
 </html>
