@@ -11,15 +11,28 @@
     </div>
   <% end %>
     <div class="mb-4">
-      <%= form.label :merchant_id, "支払い先", style: "display: block" %>
-      <span class="text-xl">
-        <%= @merchant.name %>
-        <%= form.hidden_field :merchant_id, value: @merchant.id %>
-      </span>
+      <% if @merchant.nil? %>
+        <%= form.label :merchant_id, "支払い先協賛店ID", style: "display: block" %>
+        <span class="text-xl">
+            <%= form.text_field :merchant_id, class: "border border-black p-1 rounded-sm mt-1" %>
+        </span>
+      <% else %>
+        <%= form.label :merchant_id, "支払い先", style: "display: block" %>
+        <span class="text-xl">
+          <%= @merchant.name %>
+          <%= form.hidden_field :merchant_id, value: @merchant.id %>
+        </span>
+      <% end %>
     </div>
     <div>
       <%= form.label :amount, "利用するポイント数", style: "display: block" %>
-      <%= form.number_field :amount, class: "border border-black p-1 rounded-sm mt-1" %>
+      <%= form.number_field :amount, id: "payment_amount", class: "border border-black p-1 rounded-sm mt-1 mb-3" %>
+      <br />
+      <% %w[500 1000 1500 2000 2500 3000].each do |payment_amount| %>
+        <label class="radio">
+            <%= link_to payment_amount, "javascript:void(0);", class: "is-underlined", onclick: "document.getElementById('payment_amount').value = '#{payment_amount}';", class: "border border-black p-1 rounded-sm m-1.5" %>
+        </label>
+      <% end %>
     </div>
     <div class="flex justify-center mt-8">
       <%= form.submit "決済", class: "border border-black p-1 rounded-sm flex" %>

@@ -22,9 +22,6 @@ class PaymentsController < ApplicationController
     @payment = Payment.new
     merchant_id = params[:merchant_id]
     @merchant = Merchant.find_by(id: merchant_id)
-    if @merchant.nil?
-      redirect_to root_path, alert: "指定の協賛店が存在しません"
-    end
   end
 
   # GET /payments/1/edit
