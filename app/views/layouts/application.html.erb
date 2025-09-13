@@ -53,8 +53,19 @@
         <% end %>
       </div>
     </div>
-    <p style="color: green"><%= notice %></p>
-    <p style="color: red"><%= alert %></p>
+    <% if notice||alert.present? %>
+      <div class="absolute m-auto bg-red p-3 text-white left-0 right-0 rounded-lg" style="width: 95vw; left: 0; right: 0; top: 90px;
+        background:
+        <% if notice.present? %>
+          #00A000;
+        <% elsif alert.present? %>
+          #FF0000;
+        <% end %>
+      ">
+        <span><%= notice %></span>
+        <span><%= alert %></span>
+      </div>
+    <% end %>
 
     <%= yield %>
 
