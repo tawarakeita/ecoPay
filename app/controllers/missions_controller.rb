@@ -1,5 +1,6 @@
 class MissionsController < ApplicationController
   before_action :set_mission, only: %i[ show edit update destroy ]
+  before_action :authenticate_user!, only: [:complete_via_url]
 
   # GET /missions or /missions.json
   def index
@@ -65,6 +66,37 @@ class MissionsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to missions_path, status: :see_other, notice: "Mission was successfully destroyed." }
       format.json { head :no_content }
+    end
+  end
+
+  def complete_via_url
+    code = params[:code]
+    mission = Mission.find_by(complete_code: code)
+
+    if mission
+      recent = PointTransaction.where(
+        user: current_user,
+        mission: mission,
+        transaction_type: "earn"
+      ).where("created_at >= ?", 1.hour.ago).exists?
+
+      if recent
+        redirect_to scanqrcode_path, alert: "このミッションは1時間以内にクリア済みです。しばらく待ってください。"
+        return
+      end
+
+      PointTransaction.create!(
+        user: current_user,
+        merchant: mission.merchant,
+        mission: mission,
+        transaction_type: "earn",
+        amount: mission.point,
+        description: "ミッションクリア: #{mission.title}"
+      )
+
+      redirect_to root_path, notice: "ミッションを完了しました！#{mission.point}ポイントを付与しました！"
+    else
+      redirect_to root_path, alert: "無効なコードです"
     end
   end
 

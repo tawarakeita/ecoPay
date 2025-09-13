@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :point_transactions
   resources :payments
+  get 'missions/complete', to: 'missions#complete_via_url'
   resources :missions
   get "scanqrcode", to: "scanqrcode#new"
 
