@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :missions do
     collection do
       match 'complete', to: 'missions#complete_via_url', via: [:get, :post], as: :complete_via_url
+      post 'finalize_complete', to: 'missions#finalize_complete', as: :finalize_complete
     end
   end
   get "scanqrcode", to: "scanqrcode#new"
