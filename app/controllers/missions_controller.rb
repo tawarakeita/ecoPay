@@ -69,34 +69,40 @@ class MissionsController < ApplicationController
     end
   end
 
+  # GET /missions/complete
   def complete_via_url
-    code = params[:code]
-    mission = Mission.find_by(complete_code: code)
+    if request.get?
+      # コード入力フォームを表示
+      render :complete_via_url
+    elsif request.post?
+      code = params[:code]
+      mission = Mission.find_by(complete_code: code)
 
-    if mission
-      recent = PointTransaction.where(
-        user: current_user,
-        mission: mission,
-        transaction_type: "earn"
-      ).where("created_at >= ?", 1.hour.ago).exists?
+      if mission
+        recent = PointTransaction.where(
+          user: current_user,
+          mission: mission,
+          transaction_type: "earn"
+        ).where("created_at >= ?", 1.hour.ago).exists?
 
-      if recent
-        redirect_to scanqrcode_path, alert: "このミッションは1時間以内にクリア済みです。しばらく待ってください。"
-        return
+        if recent
+          redirect_to scanqrcode_path, alert: "このミッションは1時間以内にクリア済みです。しばらく待ってください。"
+          return
+        end
+
+        PointTransaction.create!(
+          user: current_user,
+          merchant: mission.merchant,
+          mission: mission,
+          transaction_type: "earn",
+          amount: mission.point,
+          description: "ミッションクリア: #{mission.title}"
+        )
+
+        redirect_to root_path, notice: "ミッションを完了しました！#{mission.point}ポイントを付与しました！"
+      else
+        redirect_to root_path, alert: "無効なコードです"
       end
-
-      PointTransaction.create!(
-        user: current_user,
-        merchant: mission.merchant,
-        mission: mission,
-        transaction_type: "earn",
-        amount: mission.point,
-        description: "ミッションクリア: #{mission.title}"
-      )
-
-      redirect_to root_path, notice: "ミッションを完了しました！#{mission.point}ポイントを付与しました！"
-    else
-      redirect_to root_path, alert: "無効なコードです"
     end
   end
 

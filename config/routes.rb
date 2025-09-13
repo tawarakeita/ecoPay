@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
   resources :point_transactions
   resources :payments
-  get 'missions/complete', to: 'missions#complete_via_url'
-  resources :missions
+  resources :missions do
+    collection do
+      match 'complete', to: 'missions#complete_via_url', via: [:get, :post], as: :complete_via_url
+    end
+  end
   get "scanqrcode", to: "scanqrcode#new"
 
   devise_for :merchants, controllers: {
