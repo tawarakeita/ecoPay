@@ -1,7 +1,7 @@
-<h1 class="m-9 flex justify-center text-3xl">ミッションクリアコードを入力</h1>
+<h1 class="m-9 flex justify-center text-3xl">ミッションコードを入力</h1>
 <div class="m-auto" style="width: 60vw;">
   <%= form_with url: complete_via_url_missions_path, method: :post, local: true, data: { turbo: false } do |f| %>
-    <div class="mb-4">
+    <div class="mb-4 m-auto" style="width: min-content; margin: auto;">
       <%= f.label :code, "ミッションコード", style: "display: block" %>
       <span class="text-xl">
         <%= f.text_field :code, class: "border border-black p-1 rounded-sm mt-1" %>

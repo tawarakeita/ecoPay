@@ -1,12 +1,12 @@
-<h2 class="text-center text-2xl mt-8">ミッション内容の確認</h2>
-<div class="mt-6 mx-auto max-w-lg border p-4 rounded">
-  <p>タイトル: <%= mission.title %></p>
-  <p>説明: <%= mission.description %></p>
-  <p>付与ポイント: <%= mission.point %></p>
+<h2 class="m-9 flex justify-center text-3xl text-center mt-8">ミッション内容の確認</h2>
+<div class="mx-auto max-w-lg border p-4 rounded" style="margin-top: 20px; width: 80vw; margin-left: auto; margin-right: auto;">
+  <p class="text-2xl mb-2.5" style="margin-bottom: 10px;"><%= mission.title %></p>
+  <p><%= mission.description %></p>
+  <p class="mt-1">付与ポイント: <%= mission.point %>ポイント</p>
   <%= form_with url: finalize_complete_missions_path, method: :post do |f| %>
     <%= hidden_field_tag :code, code %>
-    <div class="flex justify-center mt-6">
-      <%= f.submit "この内容で確定しポイントを取得", class: "bg-blue-500 px-4 py-2 rounded" %>
+    <div class="flex justify-center" style="margin-top: 20px;">
+      <%= f.submit "ポイントを取得", class: "px-4 py-2 rounded-sm text-white p-3", style: "background-color: #5757d2;" %>
     </div>
   <% end %>
 </div>
