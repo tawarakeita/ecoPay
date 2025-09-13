@@ -4,7 +4,7 @@
   <h1 class="m-9 flex justify-center text-3xl"> ecoPayミッション</h1>
   <% @missions.each do |mission| %>
     <%= link_to mission do %>
-      <div id="<%= dom_id mission %>" class="flex flex-col m-auto border-[#2a5637] border w-[90vw] p-2 rounded-b-sm">
+      <div id="<%= dom_id mission %>" class="flex flex-col m-auto border-[#2a5637] border w-[90vw] p-2 rounded-sm">
         <span>
           <%= mission.merchant.name %>
         </span>

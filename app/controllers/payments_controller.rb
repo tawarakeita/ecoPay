@@ -17,12 +17,18 @@ class PaymentsController < ApplicationController
     # end
   end
 
-  # GET /payments/new
   def new
     @payment = Payment.new
-    merchant_id = params[:merchant_id]
-    @merchant = Merchant.find_by(id: merchant_id)
+
+    if params[:merchant_id].present?
+      @merchant = Merchant.find_by(id: params[:merchant_id])
+
+      unless @merchant
+        redirect_to root_path, alert: "指定された協賛店が見つかりません。"
+      end
+    end
   end
+
 
   # GET /payments/1/edit
   def edit

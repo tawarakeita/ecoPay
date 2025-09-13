@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   resources :point_transactions
   resources :payments
   resources :missions
+  get "scanqrcode", to: "scanqrcode#new"
+
   devise_for :merchants, controllers: {
     registrations: 'merchants/registrations'
   }
