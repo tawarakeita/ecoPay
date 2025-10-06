@@ -1,32 +1,78 @@
-<div id="reader" class="relative w-full h-full" style="height: calc(100dvh - 75px);"></div>
-<div class="absolute bottom-[12vh] left-1/2 -translate-x-1/2 z-10
-            bg-black/60 text-white rounded-2xl p-2 max-w-md
-            text-center shadow-lg w-full" style="bottom: 4vh;">
-  <div class="text-sm">
-    カメラでQRコードを読み取れない場合は協賛店ID または ミッションID を入力してください
-  </div>
-  <div class="mt-3 flex items-center justify-center space-x-3 flex-col">
-    <%= link_to "協賛店を利用する", new_payment_path,
-          class: "bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm shadow" %>
-    <%= link_to "ミッションクリアコードを入力", complete_via_url_missions_path,
-          class: "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm shadow" %>
+<div id="reader" class="relative w-full h-full"></div>
+
+<div class="absolute top-25 text-white flex flex-col items-center ml-3 mr-3">
+  <span class="text-3xl mb-4">QRコードをスキャン</span>
+  <span>決済・ミッションクリア用のQRコードをスキャンしてください。QRコードが設置されていない場合は、スタッフまでお声掛けください。</span>
+</div>
+
+<button popovertarget="open-manual-input" id="result" class="absolute right-8 bottom-30 flex flex-col items-center text-white">
+  <%= icon('fa-solid', 'keyboard', class: "text-4xl") %>
+  <span>手動で入力</span>
+</button>
+
+<div popover id="open-manual-input" class="h-[40vh] w-[80vw] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-lg">
+  <div class="h-full w-full p-3 flex flex-col items-center justify-center text-center">
+    <span class="text-2xl font-semibold mb-10">QRコードをスキャンできない場合</span>
+    <span>協賛店ID または ミッションID を手動で入力してください。</span>
+    <div class="flex flex-col space-y-4 mt-4">
+      <%= link_to new_payment_path do %>
+        <div class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-center shadow">
+          決済（協賛店IDを入力）
+        </div>
+      <% end %>
+      <%= link_to complete_via_url_missions_path do %>
+        <div class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-center shadow">
+          ミッションクリア（ミッションIDを入力）
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
 
-
 <script src="https://unpkg.com/html5-qrcode"></script>
 <script>
-  function onScanSuccess(decodedText, decodedResult) {
-    window.location.href = decodedText;
-  }
+  document.addEventListener("turbo:load", () => {
+    const readerElement = document.getElementById("reader");
+    if (!readerElement) return; // 他ページで誤動作しないように
 
-  const html5QrCode = new Html5Qrcode("reader");
-  html5QrCode.start(
-    { facingMode: "environment" },
-    { fps: 10, qrbox: 250 },
-    onScanSuccess
-  ).catch(err => {
-    document.getElementById('result').innerText = "お使いの端末ではカメラを利用できません。協賛店IDまたはミッションIDを入力してください。";
+    const html5QrCode = new Html5Qrcode("reader");
+
+    function onScanSuccess(decodedText, decodedResult) {
+      navigator.vibrate(500);
+      html5QrCode.stop().then(() => {
+        try {
+          const url = new URL(decodedText);
+          const allowedDomain = "ecopay.kei-apps.com";
+
+          if (url.hostname === allowedDomain) {
+            window.location.href = decodedText;
+          } else {
+            const confirmMove = confirm(
+              "外部サイトがスキャンされました。\n" + decodedText + " に移動しますか？"
+            );
+            if (confirmMove) {
+              window.location.href = decodedText;
+            } else {
+              location.reload();
+            }
+          }
+        } catch (err) {
+          alert("無効なQRコードです。");
+          location.reload();
+        }
+      }).catch(err => {
+        console.error("停止エラー:", err);
+      });
+    }
+
+    html5QrCode.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: 250 },
+      onScanSuccess
+    ).catch(err => {
+      document.getElementById('result').innerText =
+        "お使いの端末ではカメラを利用できません。協賛店IDまたはミッションIDを入力してください。";
+    });
   });
 </script>
 <style>
@@ -34,5 +80,14 @@
     width: 100% !important;
     height: 100% !important;
     object-fit: cover;
+  }
+
+  #reader {
+    height: calc(100dvh - 75px) !important;
+  }
+
+  html, body {
+    overflow: hidden;
+    touch-action: pan-x pan-y;
   }
 </style>

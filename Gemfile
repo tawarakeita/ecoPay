@@ -69,3 +69,4 @@ end
 gem "devise"
 gem "tailwindcss-ruby"
 gem "tailwindcss-rails"
+gem "font-awesome-sass"

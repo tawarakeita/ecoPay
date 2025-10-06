@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>EcoPayApp</title>
+    <title>EcoPay</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -11,7 +11,8 @@
   </head>
 
   <body style="height: 100vh">
-    <!-- SVG定義 -->
+
+    <!-- ハンバーガーメニューアイコン -->
     <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
       <symbol id="icon-hamburger" viewBox="0 0 30 22" fill="none">
         <g clip-path="url(#clip0_57_28)">
@@ -68,6 +69,32 @@
     <% end %>
 
     <%= yield %>
+
+    <div class="fixed bottom-0 left-0 right-0 flex justify-center pb-4">
+      <div class="flex items-center justify-evenly bg-white rounded-full w-[90%] h-[80px] shadow-lg">
+        <%= link_to root_path do %>
+          <div>
+            <%= icon('fa-solid', 'house', class: "text-4xl") %>
+          </div>
+        <% end %>
+        <%= link_to missions_path do %>
+          <div>
+            <%= icon('fa-solid', 'list', class: "text-4xl") %>
+          </div>
+        <% end %>
+        <%= link_to scanqrcode_path do %>
+          <div class="bg-gray-100 w-[100px] h-[100px] rounded-full flex items-center justify-center shadow-md m-0">
+            <%= image_tag 'qrcode.svg', class: "w-[75px] h-[75px]" %>
+          </div>
+        <% end %>
+        <div>
+          <%= icon('fa-solid', 'magnifying-glass', class: "text-4xl") %>
+        </div>
+        <div>
+          <%= icon('fa-solid', 'user', class: "text-4xl") %>
+        </div>
+      </div>
+    </div>
 
     <!-- JS -->
     <script>
