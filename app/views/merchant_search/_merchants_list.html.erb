@@ -1,7 +1,11 @@
 <% merchants.each do |merchant| %>
 <div class="flex flex-col mt-4">
   <div class="flex mr-auto">
-    <img src="https://placehold.jp/80x80.png" alt="店舗画像">
+    <% if merchant.image.attached? %>
+      <%= image_tag merchant.image, alt: "店舗画像", class: "w-20 h-20 object-cover rounded" %>
+    <% else %>
+      <img src="https://placehold.jp/cccccc/999999/80x80.png?text=No%20Image" alt="店舗画像" class="w-20 h-20 object-cover rounded">
+    <% end %>
     <div class="flex flex-col items-start justify-center ml-4">
       <span class="text-lg font-semibold text-gray-800 mb-1"><%= merchant.name %></span>
       <span class="text-gray-800 text-[12px]"><%= merchant.address %></span>

@@ -21,7 +21,7 @@
     <button popovertarget="merchant-detail" popovertargetaction="hide" class="text-2xl absolute top-3 right-5">×</button>
     <span class="text-2xl mb-6">協賛店情報</span>
     <div class="flex mr-auto">
-      <img src="https://placehold.jp/80x80.png" alt="店舗画像">
+      <img src="https://placehold.jp/cccccc/999999/80x80.png?text=No%20Image" alt="店舗画像" class="w-[80px] h-[80px] object-cover rounded">
       <div class="flex flex-col items-start justify-center ml-4">
         <span id="merchant-name" class="text-lg font-semibold text-gray-800 mb-1"></span>
         <span id="merchant-address" class="text-gray-800 text-[12px]"></span>
@@ -32,7 +32,7 @@
 </div>
 
 <script>
-  const merchants = <%= raw(@merchants.to_json(only: [:latitude, :longitude, :name, :address, :description])) %>;
+  const merchants = <%= raw(@merchants.to_json(only: [:latitude, :longitude, :name, :address, :description], methods: [:image_url])) %>;
 
   let map;
   let marker = [];
@@ -57,6 +57,7 @@
           data-name="${obj.name}"
           data-address="${obj.address}"
           data-description="${obj.description}"
+          data-image-url="${obj.image_url || ''}"
           popovertarget="merchant-detail"
         >
           詳細を見る
@@ -91,9 +92,15 @@
             const name = detailBtn.dataset.name;
             const address = detailBtn.dataset.address;
             const description = detailBtn.dataset.description || "説明文が登録されていません。";
+            const imageUrl = detailBtn.dataset.imageUrl;
             document.getElementById('merchant-name').innerText = name;
             document.getElementById('merchant-address').innerText = address;
             document.getElementById('merchant-description').innerText = description;
+            // 画像も更新
+            const merchantImage = document.querySelector('#merchant-detail img');
+            if (merchantImage) {
+              merchantImage.src = imageUrl && imageUrl.length > 0 ? imageUrl : 'https://placehold.jp/cccccc/999999/80x80.png?text=No%20Image';
+            }
           });
         }
       });

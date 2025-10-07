@@ -5,7 +5,8 @@ class Merchants::RegistrationsController < Devise::RegistrationsController
   def sign_up_params
     params.require(:merchant).permit(
       :email, :password, :password_confirmation,
-      :name, :description, :address, :latitude, :longitude
+      :name, :description, :address, :latitude, :longitude,
+      :image
     )
   end
 
@@ -13,7 +14,8 @@ class Merchants::RegistrationsController < Devise::RegistrationsController
   def account_update_params
     params.require(:merchant).permit(
       :email, :password, :password_confirmation, :current_password,
-      :name, :description, :address, :latitude, :longitude
+      :name, :description, :address, :latitude, :longitude,
+      :image
     )
   end
 end

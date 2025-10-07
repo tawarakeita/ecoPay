@@ -25,10 +25,19 @@ class Merchant < ApplicationRecord
     MUNICIPALITIES[municipality_id]
   end
 
+  # JSONなどで画像URLを渡すためのヘルパー
+  def image_url
+    return nil unless image.attached?
+    Rails.application.routes.url_helpers.rails_blob_url(image, only_path: true)
+  end
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   has_many :missions, dependent: :destroy
   has_many :payments, dependent: :destroy
+
+  # 画像添付（Active Storage）
+  has_one_attached :image
 end

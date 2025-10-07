@@ -31,6 +31,17 @@
     <%= f.password_field :current_password, autocomplete: "current-password" %>
   </div>
 
+  <div class="field">
+    <%= f.label :image, "店舗画像" %><br />
+    <%= f.file_field :image, accept: "image/*" %>
+    <% if resource.image.attached? %>
+      <div class="mt-2">
+        <p>現在の画像:</p>
+        <%= image_tag resource.image, class: "w-20 h-20 object-cover rounded" %>
+      </div>
+    <% end %>
+  </div>
+
   <div class="actions">
     <%= f.submit "Update" %>
   </div>
