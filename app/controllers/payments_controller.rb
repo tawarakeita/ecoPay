@@ -12,9 +12,9 @@ class PaymentsController < ApplicationController
 
   # GET /payments/1 or /payments/1.json
   def show
-    # if @payment.created_at < 5.minutes.ago
-    #   redirect_to root_path, alert: "確認画面の有効期限が切れました"
-    # end
+    if @payment.created_at < 5.minutes.ago
+      redirect_to root_path, alert: "確認画面の有効期限が切れました"
+    end
   end
 
   def new
