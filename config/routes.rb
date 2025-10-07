@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     end
   end
   get "scanqrcode", to: "scanqrcode#new"
+  get "merchant_search", to: "merchant_search#index"
 
   devise_for :merchants, controllers: {
     registrations: 'merchants/registrations'

@@ -1,0 +1,13 @@
+<!-- フレームで囲む -->
+<turbo-frame id="merchant-results">
+  <%= form_with url: merchant_search_path, method: :get, local: false, data: { turbo_frame: "merchant-results" } do %>
+    <%= label_tag :municipality_id, "市町村を選択", class: "block mb-2 font-medium" %>
+
+    <%= select_tag :municipality_id,
+      options_for_select([["全ての市町村", ""]] + @municipality_options, params[:municipality_id]),
+      class: "border rounded p-2 w-full",
+      onchange: "this.form.requestSubmit();" %>
+  <% end %>
+
+  <%= render partial: "merchants_list", locals: { merchants: @merchants } %>
+</turbo-frame>

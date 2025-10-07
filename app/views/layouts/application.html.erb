@@ -10,7 +10,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body style="height: 100vh">
+  <body style="height: calc(100dvh)">
 
     <!-- ハンバーガーメニューアイコン -->
     <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
@@ -71,7 +71,7 @@
     <%= yield %>
 
     <div class="fixed bottom-0 left-0 right-0 flex justify-center pb-4">
-      <div class="flex items-center justify-evenly bg-white rounded-full w-[90%] h-[80px] shadow-lg">
+      <div class="flex items-center justify-evenly bg-gray-50 rounded-full w-[90%] h-[80px] shadow-lg">
         <%= link_to root_path do %>
           <div>
             <%= icon('fa-solid', 'house', class: "text-4xl") %>
@@ -83,13 +83,15 @@
           </div>
         <% end %>
         <%= link_to scanqrcode_path do %>
-          <div class="bg-gray-100 w-[100px] h-[100px] rounded-full flex items-center justify-center shadow-md m-0">
+          <div class="bg-gray-50 w-[100px] h-[100px] rounded-full flex items-center justify-center shadow-md m-0">
             <%= image_tag 'qrcode.svg', class: "w-[75px] h-[75px]" %>
           </div>
         <% end %>
-        <div>
-          <%= icon('fa-solid', 'magnifying-glass', class: "text-4xl") %>
-        </div>
+        <%= link_to merchant_search_path do %>
+          <div>
+            <%= icon('fa-solid', 'magnifying-glass', class: "text-4xl") %>
+          </div>
+        <% end %>
         <div>
           <%= icon('fa-solid', 'user', class: "text-4xl") %>
         </div>

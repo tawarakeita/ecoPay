@@ -1,0 +1,2 @@
+module MerchantSearchHelper
+end
