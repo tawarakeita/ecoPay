@@ -1,0 +1,18 @@
+<div class="w-full h-[60vh] flex flex-col items-center justify-center space-y-4 bg-[#4f754f]">
+  <div class="bg-white w-[90vw] h-[30vh] rounded-lg flex flex-col items-center justify-center space-y-4 relative">
+    <% if user_signed_in? %>
+      <div class="absolute top-5 right-5">
+        <%= link_to point_transactions_path do %>
+          <%= icon('fa-solid', 'arrow-up-right-from-square', class: "text-2xl") %>
+        <% end %>
+      </div>
+      <span class="text-8xl"><%= current_user.current_points %></span>
+      <span class="text-2xl">ポイント</span>
+    <% else %>
+      <span class="text-2xl">ポイントを表示するには、<br>ログインしてください。</span>
+    <% end %>
+  </div>
+  <div class="flex gap-5 mt-3">
+    <div class="bg-white w-[100vw] h-[15vh] rounded-lg flex flex-col items-center justify-center space-y-4"></div>
+  </div>
+</div>
