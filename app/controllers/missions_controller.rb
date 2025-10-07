@@ -107,7 +107,7 @@ class MissionsController < ApplicationController
       ).where("created_at >= ?", 1.hour.ago).exists?
 
       if recent
-        redirect_to scanqrcode_path, alert: "このミッションは1時間以内にクリア済みです。しばらく待ってください。"
+        redirect_to scanqrcode_path, alert: "このミッションは1時間以内にクリア済みです。"
         return
       end
 
@@ -120,7 +120,7 @@ class MissionsController < ApplicationController
         description: "ミッションクリア: #{mission.title}"
       )
 
-      redirect_to root_path, notice: "ミッションを完了しました！#{mission.point}ポイントを付与しました！"
+      redirect_to root_path, notice: "ミッションを完了しました！#{mission.point}ポイントを付与されました！"
     else
       redirect_to root_path, alert: "無効なコードです"
     end

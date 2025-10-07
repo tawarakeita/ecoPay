@@ -36,11 +36,39 @@ class PaymentsController < ApplicationController
 
   # POST /payments or /payments.json
   def create
+    # 支払いフォームの内容を受け取る
+    @merchant = Merchant.find(payment_params[:merchant_id])
+    amount = payment_params[:amount].to_i
+
     @payment = current_user.payments.new(payment_params)
+
+    # 現在のポイント残高を算出
+    current_points = PointTransaction.where(user: current_user)
+      .sum("CASE WHEN transaction_type = 'earn' THEN amount WHEN transaction_type = 'use' THEN -amount ELSE 0 END")
+
+    # 不正チェック
+    if amount > current_points
+      flash[:alert] = "ポイントが不足しています。"
+      return redirect_to new_payment_path(merchant_id: @merchant.id)
+    end
+
+    if amount > 5000
+      flash[:alert] = "1回の決済で利用できるのは最大5000ポイントです。"
+      return redirect_to new_payment_path(merchant_id: @merchant.id)
+    end
 
     respond_to do |format|
       if @payment.save
-        format.html { redirect_to @payment, notice: "Payment was successfully created." }
+        # 支払い完了時にポイント利用履歴を追加
+        PointTransaction.create!(
+          user: current_user,
+          merchant: @merchant,
+          transaction_type: "use",
+          amount: amount,
+          description: "#{@merchant.name} での支払い"
+        )
+
+        format.html { redirect_to @payment, notice: "支払いが完了しました！ #{amount}ポイントを利用しました。" }
         format.json { render :show, status: :created, location: @payment }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -80,6 +108,6 @@ class PaymentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def payment_params
-      params.require(:payment).permit(:user_id, :merchant_id, :amount)
+      params.require(:payment).permit(:merchant_id, :amount)
     end
 end

@@ -1,5 +1,5 @@
 class PointTransaction < ApplicationRecord
   belongs_to :user
   belongs_to :merchant
-  belongs_to :mission
+  belongs_to :mission, optional: true
 end
