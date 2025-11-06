@@ -1,93 +1,43 @@
-<div id="reader" class="relative w-full h-full"></div>
+<%= javascript_include_tag "scan_qrcode", type: "module" %>
 
-<div class="absolute top-25 text-white flex flex-col items-center ml-3 mr-3">
-  <span class="text-3xl mb-4">QRコードをスキャン</span>
-  <span>決済・ミッションクリア用のQRコードをスキャンしてください。QRコードが設置されていない場合は、スタッフまでお声掛けください。</span>
-</div>
+<div class="relative w-screen h-[calc(100dvh-75px)] overflow-hidden">
+  <video id="qr-video" class="absolute top-0 left-0 w-full h-full object-cover" autoplay muted playsinline></video>
 
-<button popovertarget="open-manual-input" id="result" class="absolute right-8 bottom-30 flex flex-col items-center text-white">
-  <%= icon('fa-solid', 'keyboard', class: "text-4xl") %>
-  <span>手動で入力</span>
-</button>
+  <div class="absolute top-10 text-[#f1f1f1] text-shadow-lg flex flex-col items-center ml-3 mr-3">
+    <span class="text-3xl mb-4">QRコードをスキャン</span>
+    <span>決済・ミッションクリア用のQRコードをスキャンしてください。QRコードが設置されていない場合は、スタッフまでお声掛けください。</span>
+  </div>
 
-<div popover id="open-manual-input" class="h-[40vh] w-[80vw] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-lg">
-  <div class="h-full w-full p-3 flex flex-col items-center justify-center text-center">
-    <span class="text-2xl font-semibold mb-10">QRコードをスキャンできない場合</span>
-    <span>協賛店ID または ミッションID を手動で入力してください。</span>
-    <div class="flex flex-col space-y-4 mt-4">
-      <%= link_to new_payment_path do %>
-        <div class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-center shadow">
-          決済（協賛店IDを入力）
-        </div>
-      <% end %>
-      <%= link_to complete_via_url_missions_path do %>
-        <div class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-center shadow">
-          ミッションクリア（ミッションIDを入力）
-        </div>
-      <% end %>
+  <button popovertarget="open-manual-input" id="result" class="absolute right-8 bottom-30 flex flex-col items-center text-[#f1f1f1] text-shadow-lg">
+    <%= icon('fa-solid', 'keyboard', class: "text-4xl") %>
+    <span>手動で入力</span>
+  </button>
+
+  <div popover id="open-manual-input" class="w-[80dvw] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-lg">
+    <div class="align-content-center grid justify-items-center p-8">
+      <div class="flex flex-col items-center">
+        <span class="text-2xl font-semibold mb-3">IDを手動で入力する</span>
+      </div>
+      <div class="mt-5">
+        <%= link_to new_payment_path do %>
+          <div class="bg-green-800 text-white px-4 py-2 rounded-lg text-center shadow mb-3">
+            決済（協賛店IDを入力）
+          </div>
+        <% end %>
+        <%= link_to complete_via_url_missions_path do %>
+          <div class="bg-green-800 text-white px-4 py-2 rounded-lg text-center shadow">
+            ミッションクリア（ミッションIDを入力）
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
 
-<script src="https://unpkg.com/html5-qrcode"></script>
-<script>
-  document.addEventListener("turbo:load", () => {
-    const readerElement = document.getElementById("reader");
-    if (!readerElement) return; // 他ページで誤動作しないように
-
-    const html5QrCode = new Html5Qrcode("reader");
-
-    function onScanSuccess(decodedText, decodedResult) {
-      navigator.vibrate(500);
-      html5QrCode.stop().then(() => {
-        try {
-          const url = new URL(decodedText);
-          const allowedDomain = "4372f670965c.ngrok-free.app";
-
-          if (url.hostname === allowedDomain) {
-            window.location.href = decodedText;
-          } else {
-            const confirmMove = confirm(
-              "外部サイトがスキャンされました。\n" + decodedText + " に移動しますか？"
-            );
-            if (confirmMove) {
-              window.location.href = decodedText;
-            } else {
-              location.reload();
-            }
-          }
-        } catch (err) {
-          alert("無効なQRコードです。");
-          location.reload();
-        }
-      }).catch(err => {
-        console.error("停止エラー:", err);
-      });
-    }
-
-    html5QrCode.start(
-      { facingMode: "environment" },
-      { fps: 10, qrbox: 250 },
-      onScanSuccess
-    ).catch(err => {
-      document.getElementById('result').innerText =
-        "お使いの端末ではカメラを利用できません。協賛店IDまたはミッションIDを入力してください。";
-    });
-  });
-</script>
 <style>
-  #reader video {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover;
-  }
-
-  #reader {
-    height: calc(100dvh - 75px) !important;
-  }
-
-  html, body {
-    overflow: hidden;
-    touch-action: pan-x pan-y;
+  .scan-region-highlight-svg {
+    stroke: #04c665 !important;
+    transform: scale(1) !important;
+    stroke-linecap: butt !important;
   }
 </style>
