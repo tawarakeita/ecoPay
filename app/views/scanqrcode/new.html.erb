@@ -3,7 +3,7 @@
 <div class="relative w-screen h-[calc(100dvh-75px)] overflow-hidden">
   <video id="qr-video" class="absolute top-0 left-0 w-full h-full object-cover" autoplay muted playsinline></video>
 
-  <div class="absolute top-10 text-[#f1f1f1] text-shadow-lg flex flex-col items-center ml-3 mr-3">
+  <div class="absolute top-10 right-0 left-0 m-auto mr-2 ml-2 flex justify-center items-center flex-col text-[#f1f1f1] text-shadow-lg">
     <span class="text-3xl mb-4">QRコードをスキャン</span>
     <span>決済・ミッションクリア用のQRコードをスキャンしてください。QRコードが設置されていない場合は、スタッフまでお声掛けください。</span>
   </div>
@@ -14,7 +14,10 @@
   </button>
 
   <div popover id="open-manual-input" class="w-[80dvw] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-lg">
-    <div class="align-content-center grid justify-items-center p-8">
+    <div class="reative align-content-center grid justify-items-center p-8">
+      <button popovertarget="open-manual-input" popovertargetaction="hide" class="text-2xl absolute top-2 right-4">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
       <div class="flex flex-col items-center">
         <span class="text-2xl font-semibold mb-3">IDを手動で入力する</span>
       </div>
