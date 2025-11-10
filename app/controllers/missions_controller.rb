@@ -74,7 +74,7 @@ class MissionsController < ApplicationController
     if request.get?
       code = params[:code]
       if code.present?
-        mission = Mission.find_by(complete_code: code)
+        mission = Mission.find_by(unique_code: code)
         if mission
           render :confirm_complete, locals: { mission: mission, code: code }
         else
@@ -85,7 +85,7 @@ class MissionsController < ApplicationController
       end
     elsif request.post?
       code = params[:code]
-      mission = Mission.find_by(complete_code: code)
+      mission = Mission.find_by(unique_code: code)
       Rails.logger.debug "POST: code=#{code}, mission=#{mission.inspect}"
       if mission
         render :confirm_complete, locals: { mission: mission, code: code }
@@ -97,7 +97,7 @@ class MissionsController < ApplicationController
 
   def finalize_complete
     code = params[:code]
-    mission = Mission.find_by(complete_code: code)
+    mission = Mission.find_by(unique_code: code)
 
     if mission
       recent = PointTransaction.where(

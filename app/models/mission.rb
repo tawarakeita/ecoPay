@@ -1,13 +1,13 @@
 class Mission < ApplicationRecord
   belongs_to :merchant
-  validates :complete_code, presence: true, uniqueness: true
-  before_create :generate_complete_code
+  validates :unique_code, presence: true, uniqueness: true
+  before_create :generate_unique_code
 
   private
 
-  def generate_complete_code
+  def generate_unique_code
     begin
-      self.complete_code = SecureRandom.hex(4)
-    end while Mission.exists?(complete_code: self.complete_code)
+      self.unique_code = SecureRandom.hex(4)
+    end while Mission.exists?(unique_code: self.unique_code)
   end
 end

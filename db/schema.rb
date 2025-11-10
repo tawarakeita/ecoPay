@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_07_080517) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_10_123401) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -63,9 +63,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_07_080517) do
     t.integer "point"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "complete_code"
-    t.index ["complete_code"], name: "index_missions_on_complete_code", unique: true
+    t.string "unique_code"
     t.index ["merchant_id"], name: "index_missions_on_merchant_id"
+    t.index ["unique_code"], name: "index_missions_on_unique_code", unique: true
   end
 
   create_table "payments", force: :cascade do |t|
