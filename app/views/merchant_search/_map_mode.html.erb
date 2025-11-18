@@ -1,43 +1,19 @@
-<!-- 部分テンプレート map_mode.html.erb -->
-<div id="custom-map" class="w-full h-full"></div>
+<div id="map" class="w-full h-full"></div>
 
-<!-- JSON データは隠し div に埋め込む -->
-<div id="merchants-data" class="hidden">
-  <%= raw(@merchants.to_json(only: [:latitude, :longitude, :name])) %>
-</div>
-
+<%# 協賛店データをJSに送信 %>
 <script>
-  function initMap() {
-    // マップ初期化
-    const map = new google.maps.Map(document.getElementById("custom-map"), {
-      center: { lat: 35.658581, lng: 139.745433 },
-      zoom: 8
-    });
-
-    // merchants データを取得
-    const merchantsDiv = document.getElementById("merchants-data");
-    if (merchantsDiv) {
-      const merchants = JSON.parse(merchantsDiv.textContent);
-      if (merchants && merchants.length > 0) {
-        merchants.forEach(m => {
-          new google.maps.Marker({
-            position: { lat: m.latitude, lng: m.longitude },
-            map: map,
-            title: m.name
-          });
-        });
-      }
-    }
-  }
-
-  // Turbo 対応
-  document.addEventListener("turbo:load", () => {
-    if (typeof google !== "undefined" && google.maps) {
-      initMap();
-    }
-  });
-
-  window.initMap = initMap;
+  window.merchantsData = <%= raw(@merchants.to_json(
+    only: [:latitude, :longitude, :name, :address, :description],
+    methods: [:image_url]
+  )) %>;
 </script>
 
+<%# 元のバツボタンを非表示にする %>
+<style>
+  .gm-ui-hover-effect, .gm-style-iw-ch {
+    display: none !important;
+  }
+</style>
+
+<%= javascript_include_tag "merchant_search_map", defer: true %>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['MAP_API_KEY'] %>&callback=initMap"></script>
