@@ -4,11 +4,7 @@ class MissionsController < ApplicationController
 
   # GET /missions or /missions.json
   def index
-    if merchant_signed_in?
-      @missions = current_merchant.missions
-    else
-      @missions = Mission.all
-    end
+    @missions = Mission.all
   end
 
   # GET /missions/1 or /missions/1.json
@@ -18,22 +14,19 @@ class MissionsController < ApplicationController
   # GET /missions/new
   def new
     if merchant_signed_in?
-      @mission = Mission.new
+      @mission = current_merchant.missions.new
     else
-      redirect_to missions_path
+      @mission = Mission.new
     end
   end
 
   # GET /missions/1/edit
   def edit
-    if !merchant_signed_in?
-      redirect_to missions_path
-    end
   end
 
   # POST /missions or /missions.json
   def create
-    @mission = current_merchant.missions.new(mission_params)
+    @mission = Mission.new(mission_params)
 
     respond_to do |format|
       if @mission.save
@@ -111,9 +104,14 @@ class MissionsController < ApplicationController
         return
       end
 
+      merchant = nil
+      if mission.respond_to?(:merchant_id) && mission.merchant_id.present?
+        merchant = Merchant.find_by(id: mission.merchant_id)
+      end
+
       PointTransaction.create!(
         user: current_user,
-        merchant: mission.merchant,
+        merchant: merchant,
         mission: mission,
         transaction_type: "earn",
         amount: mission.point,
@@ -127,12 +125,10 @@ class MissionsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_mission
       @mission = Mission.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
     def mission_params
       params.require(:mission).permit(:merchant_id, :title, :description, :point)
     end

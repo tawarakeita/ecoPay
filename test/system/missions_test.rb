@@ -14,10 +14,9 @@ class MissionsTest < ApplicationSystemTestCase
     visit missions_url
     click_on "New mission"
 
-    fill_in "Description", with: @mission.description
-    fill_in "Merchant", with: @mission.merchant_id
-    fill_in "Point", with: @mission.point
-    fill_in "Title", with: @mission.title
+  fill_in "Description", with: @mission.description
+  fill_in "Point", with: @mission.point
+  fill_in "Title", with: @mission.title
     click_on "Create Mission"
 
     assert_text "Mission was successfully created"
@@ -28,10 +27,9 @@ class MissionsTest < ApplicationSystemTestCase
     visit mission_url(@mission)
     click_on "Edit this mission", match: :first
 
-    fill_in "Description", with: @mission.description
-    fill_in "Merchant", with: @mission.merchant_id
-    fill_in "Point", with: @mission.point
-    fill_in "Title", with: @mission.title
+  fill_in "Description", with: @mission.description
+  fill_in "Point", with: @mission.point
+  fill_in "Title", with: @mission.title
     click_on "Update Mission"
 
     assert_text "Mission was successfully updated"

@@ -1,5 +1,9 @@
 class Mission < ApplicationRecord
-  belongs_to :merchant
+
+  def merchant_record
+    return nil unless respond_to?(:merchant_id)
+    Merchant.find_by(id: merchant_id)
+  end
   validates :unique_code, presence: true, uniqueness: true
   before_create :generate_unique_code
 

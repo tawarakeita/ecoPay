@@ -4,7 +4,8 @@
       <%= mission.title %>
     </h1>
     <span>
-      <%= mission.merchant.name %>
+      <% merchant = mission.respond_to?(:merchant_record) ? mission.merchant_record : (Merchant.find_by(id: mission.merchant_id) rescue nil) %>
+      <%= merchant&.name || "-" %>
     </span>
   </div>
   <span>
