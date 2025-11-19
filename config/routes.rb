@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :mission_admins
   resources :point_transactions
   resources :payments
   resources :missions do
