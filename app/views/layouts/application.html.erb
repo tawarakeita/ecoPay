@@ -12,7 +12,7 @@
 
   <body style="height: calc(100dvh)">
 
-    <!-- ハンバーガーメニューアイコン -->
+    <%# SVG %>
     <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
       <symbol id="icon-hamburger" viewBox="0 0 30 22" fill="none">
         <g clip-path="url(#clip0_57_28)">
@@ -28,32 +28,34 @@
       </symbol>
     </svg>
 
-    <!-- ヘッダー -->
-    <div class="bg-green-800 w-full h-[75px] flex items-center justify-between p-4 relative">
-      <svg class="w-10 h-8 text-white cursor-pointer" id="burger">
-        <use href="#icon-hamburger"></use>
-      </svg>
+    <%# ヘッダー %>
+    <% if user_signed_in? %>
+      <div class="bg-green-800 w-full h-[75px] flex items-center justify-between p-4 relative">
+        <svg class="w-10 h-8 text-white cursor-pointer" id="burger">
+          <use href="#icon-hamburger"></use>
+        </svg>
 
-      <span class="text-3xl text-white">ecoPay</span>
+        <span class="text-3xl text-white">ecoPay</span>
 
-      <!-- メニュー -->
-      <div id="content" class="hidden w-50 h-60 absolute bg-white border top-20 left-1.5 rounded-lg p-2 shadow-md z-50">
-        <% if merchant_signed_in? %>
-          <h1 class="text-xl">協賛店アカウント</h1>
-          <div class="mt-1">
-            <%= current_merchant.name %><br />
-            <%= link_to "ログアウト", destroy_merchant_session_path, method: :delete, data: { turbo_method: :delete }, class: "text-blue-600 underline hover:text-blue-800 cursor-pointer" %>
-          </div>
-        <% elsif user_signed_in? %>
-          <div class="mt-1">
-            <%= current_user.email %><br />
-            <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "text-blue-600 underline hover:text-blue-800 cursor-pointer" %>
-          </div>
-        <% else %>
-          <%= link_to "ログイン", new_user_session_path %>
-        <% end %>
+        <div id="content" class="hidden w-50 h-60 absolute bg-white border top-20 left-1.5 rounded-lg p-2 shadow-md z-50">
+          <% if merchant_signed_in? %>
+            <h1 class="text-xl">協賛店アカウント</h1>
+            <div class="mt-1">
+              <%= current_merchant.name %><br />
+              <%= link_to "ログアウト", destroy_merchant_session_path, method: :delete, data: { turbo_method: :delete }, class: "text-blue-600 underline hover:text-blue-800 cursor-pointer" %>
+            </div>
+          <% elsif user_signed_in? %>
+            <div class="mt-1">
+              <%= current_user.email %><br />
+              <%= link_to "ログアウト", destroy_user_session_path, method: :delete, data: { turbo_method: :delete }, class: "text-blue-600 underline hover:text-blue-800 cursor-pointer" %>
+            </div>
+          <% else %>
+            <%= link_to "ログイン", new_user_session_path %>
+          <% end %>
+        </div>
       </div>
-    </div>
+    <% end %>
+
     <% if notice||alert.present? %>
       <div class="absolute m-auto bg-red p-3 text-white left-0 right-0 rounded-lg" style="width: 95vw; left: 0; right: 0; top: 90px;
         background:
@@ -70,9 +72,9 @@
 
     <%= yield %>
 
-    <% unless merchant_signed_in? %>
+    <% if user_signed_in? %>
       <div class="fixed bottom-0 left-0 right-0 flex justify-center pb-4">
-        <div class="flex items-center justify-evenly bg-gray-50 rounded-full w-[90%] h-[80px] shadow-lg">
+        <div class="flex items-center justify-evenly bg-gray-50 rounded-full w-[90%] h-20 shadow-lg">
           <%= link_to root_path do %>
             <div>
               <%= icon('fa-solid', 'house', class: "text-4xl") %>
@@ -102,14 +104,12 @@
       </div>
     <% end %>
 
-    <!-- JS -->
     <script>
       document.addEventListener("turbo:load", () => {
       const burger = document.getElementById("burger");
       const content = document.getElementById("content");
 
       if (burger && content) {
-        // 既存イベント削除
         burger.replaceWith(burger.cloneNode(true));
         const newBurger = document.getElementById("burger");
 
