@@ -1,7 +1,7 @@
 class MissionsController < ApplicationController
   before_action :set_mission, only: %i[ show edit update destroy ]
-  before_action :authenticate_mission_admin!, except: [:index, :show, :complete_via_url]
-  before_action :authenticate_user!, only: [:complete_via_url]
+  before_action :authenticate_mission_admin!, except: [:index, :show, :complete_via_url, :finalize_complete]
+  before_action :authenticate_user!, only: [:complete_via_url, :finalize_complete]
 
   # GET /missions or /missions.json
   def index
