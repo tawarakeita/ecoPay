@@ -12,6 +12,15 @@ class MissionsController < ApplicationController
 
   # GET /missions/1 or /missions/1.json
   def show
+    @mission = Mission.find(params[:id])
+
+    if mission_admin_signed_in? && @mission.mission_admin_id == current_mission_admin.id
+      render :show_admin and return
+    elsif merchant_signed_in? && @mission.merchant_id == current_merchant.id
+      render :show_admin and return
+    end
+
+    render :show
   end
 
   # GET /missions/new
@@ -127,6 +136,18 @@ class MissionsController < ApplicationController
     else
       redirect_to root_path, alert: "無効なコードです"
     end
+  end
+
+  def kiosk
+    @mission = Mission.find(params[:id])
+
+    if mission_admin_signed_in? && @mission.mission_admin_id == current_mission_admin.id
+      render :kiosk and return
+    elsif merchant_signed_in? && @mission.merchant_id == current_merchant.id
+      render :kiosk and return
+    end
+
+    redirect_to root_path
   end
 
   private

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     collection do
       match 'complete', to: 'missions#complete_via_url', via: [:get, :post], as: :complete_via_url
       post 'finalize_complete', to: 'missions#finalize_complete', as: :finalize_complete
+      get ":id/kiosk", to: "missions#kiosk", as: :mission_kiosk
     end
   end
 

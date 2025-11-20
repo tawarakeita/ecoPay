@@ -1,7 +1,6 @@
 class ApplicationController < ActionController::Base
   # ログインしていない場合、ユーザーログインのトップにリダイレクトする
   # Skip this check for Devise controllers so the login pages themselves are reachable.
-  before_action :authenticate_any!, unless: :devise_controller?
 
   private
 
