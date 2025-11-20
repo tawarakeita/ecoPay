@@ -1,6 +1,8 @@
 class MissionsController < ApplicationController
   before_action :set_mission, only: %i[ show edit update destroy ]
-  before_action :authenticate_mission_admin!, except: [:index, :show, :complete_via_url, :finalize_complete]
+  # Allow merchants to access new/create so merchants can create missions.
+  # mission_admin authentication still required for other management actions.
+  before_action :authenticate_mission_admin!, except: [:index, :show, :new, :create, :complete_via_url, :finalize_complete]
   before_action :authenticate_user!, only: [:complete_via_url, :finalize_complete]
 
   # GET /missions or /missions.json
@@ -16,8 +18,8 @@ class MissionsController < ApplicationController
   def new
     if merchant_signed_in?
       @mission = current_merchant.missions.new
-    else
-      @mission = Mission.new
+    elsif mission_admin_signed_in?
+      @mission = current_mission_admin.missions.new
     end
   end
 
@@ -27,7 +29,13 @@ class MissionsController < ApplicationController
 
   # POST /missions or /missions.json
   def create
-    @mission = Mission.new(mission_params)
+    if merchant_signed_in?
+      @mission = current_merchant.missions.new(mission_params)
+    elsif mission_admin_signed_in?
+      @mission = current_mission_admin.missions.new(mission_params)
+    else
+      @mission = Mission.new(mission_params)
+    end
 
     respond_to do |format|
       if @mission.save
@@ -105,14 +113,10 @@ class MissionsController < ApplicationController
         return
       end
 
-      merchant = nil
-      if mission.respond_to?(:merchant_id) && mission.merchant_id.present?
-        merchant = Merchant.find_by(id: mission.merchant_id)
-      end
-
       PointTransaction.create!(
         user: current_user,
-        merchant: merchant,
+        merchant: nil,
+        mission_admin: current_mission_admin,
         mission: mission,
         transaction_type: "earn",
         amount: mission.point,
@@ -126,11 +130,13 @@ class MissionsController < ApplicationController
   end
 
   private
+    # Use callbacks to share common setup or constraints between actions.
     def set_mission
       @mission = Mission.find(params[:id])
     end
 
+    # Only allow a list of trusted parameters through.
     def mission_params
-      params.require(:mission).permit(:merchant_id, :title, :description, :point)
+      params.require(:mission).permit(:title, :description, :point)
     end
 end

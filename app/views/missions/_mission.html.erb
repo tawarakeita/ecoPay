@@ -4,8 +4,11 @@
       <%= mission.title %>
     </h1>
     <span>
-      <% merchant = mission.respond_to?(:merchant_record) ? mission.merchant_record : (Merchant.find_by(id: mission.merchant_id) rescue nil) %>
-      <%= merchant&.name || "-" %>
+      <% if mission.mission_admin.present? %>
+        <%= mission.mission_admin.name %>
+      <% elsif mission.merchant.present? %>
+        <%= mission.merchant.name %>
+      <% end %>
     </span>
   </div>
   <span>

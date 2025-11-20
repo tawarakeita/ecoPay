@@ -35,8 +35,10 @@ class Merchant < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-  has_many :missions, dependent: :destroy
   has_many :payments, dependent: :destroy
+
+  # allow merchants to own missions
+  has_many :missions, dependent: :nullify
 
   # 画像添付（Active Storage）
   has_one_attached :image

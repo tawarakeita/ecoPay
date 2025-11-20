@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_19_132948) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_20_120000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -70,14 +70,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_19_132948) do
   end
 
   create_table "missions", force: :cascade do |t|
-    t.integer "merchant_id", null: false
     t.string "title"
     t.text "description"
     t.integer "point"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "unique_code"
+    t.integer "mission_admin_id"
+    t.integer "merchant_id"
     t.index ["merchant_id"], name: "index_missions_on_merchant_id"
+    t.index ["mission_admin_id"], name: "index_missions_on_mission_admin_id"
     t.index ["unique_code"], name: "index_missions_on_unique_code", unique: true
   end
 
@@ -120,6 +122,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_19_132948) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "missions", "merchants"
+  add_foreign_key "missions", "mission_admins"
   add_foreign_key "payments", "merchants"
   add_foreign_key "payments", "users"
   add_foreign_key "point_transactions", "merchants"

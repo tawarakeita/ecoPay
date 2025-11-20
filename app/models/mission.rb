@@ -1,11 +1,15 @@
 class Mission < ApplicationRecord
 
-  def merchant_record
-    return nil unless respond_to?(:merchant_id)
-    Merchant.find_by(id: merchant_id)
-  end
+  # mission_admin is optional: missions can be created by merchants or anonymously
+  # depending on the flow. Allow mission_admin to be nil at the model level.
+  belongs_to :mission_admin, optional: true
+  # Optional association to Merchant: set when a merchant creates a mission
+  # (missions can also be created by mission_admins)
+  belongs_to :merchant, optional: true
+  # Ensure a unique_code exists before validation so presence/uniqueness
+  # validations pass when creating a record.
+  before_validation :generate_unique_code, on: :create
   validates :unique_code, presence: true, uniqueness: true
-  before_create :generate_unique_code
 
   private
 
