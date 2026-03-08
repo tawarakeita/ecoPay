@@ -16,7 +16,7 @@ export default function Page() {
         </div>
         <div className="relative w-3/4 m-auto">
           <Image
-            src="/kisuki_line/title.svg"
+            src="kisuki_line/title.svg"
             alt="エコな乗車でポイントゲット！"
             width={1200}
             height={800}
@@ -152,7 +152,7 @@ export default function Page() {
                 で、メールアドレス・パスワードを設定して、仮登録を行います。仮登録後、設定されたメールアドレス宛に本登録用のリンクが送信されますので、メール内のURLにアクセスして本登録を完了して、ログインをしてください。メールが届かない場合、迷惑メールフォルダ等に振り分けられていないかご確認ください。（メールは次のアドレスから送信されます。ecopay.kisukiline@gmail.com）
               </span>
             </div>
-            <Image src="/kisuki_line/create_account_flow.svg" alt="アカウント新規作成方法" className='w-full p-5 pt-0' width={150} height={200}></Image>
+            <Image src="kisuki_line/create_account_flow.svg" alt="アカウント新規作成方法" className='w-full p-5 pt-0' width={150} height={200}></Image>
           </div>
           <div>
             <div className='flex items-center gap-2 mb-3 mt-10'>
@@ -165,7 +165,7 @@ export default function Page() {
                 <a href="https://www.unnan-kankou.jp/trip/unnanshikankouannaisho/" className='text-blue-800 underline'>観光案内所について</a>
               </span>
             </div>
-            <Image src="/kisuki_line/get_point_flow.svg" alt="ポイント取得方法" className='w-full p-5 pt-0' width={150} height={200}></Image>
+            <Image src="kisuki_line/get_point_flow.svg" alt="ポイント取得方法" className='w-full p-5 pt-0' width={150} height={200}></Image>
           </div>
         </div>
       </div>
